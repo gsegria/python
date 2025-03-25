@@ -1,0 +1,20 @@
+def predict_class(text):
+    # 将输入文本转换为序列
+    seq = tokenizer.texts_to_sequences([text])
+    padded = pad_sequences(seq, maxlen=X.shape[1], padding='post')
+
+    # 获取预测结果
+    pred = model.predict(padded)
+    predicted_label = label_encoder.inverse_transform([np.argmax(pred)])
+
+    return predicted_label[0]
+
+# 示例交互
+while True:
+    user_input = input("You: ")
+    if user_input.lower() == 'exit':
+        print("Goodbye!")
+        break
+    
+    response = predict_class(user_input)
+    print(f"Bot: {response}")
