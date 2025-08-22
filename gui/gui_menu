@@ -1,0 +1,75 @@
+import tkinter as tk
+from tkinter import Menu, Text, Frame, Button, messagebox
+
+
+class App(tk.Tk):
+    def __init__(self):
+        super().__init__()
+
+        self.title("GUI 範例")
+        self.geometry("600x400")
+
+        self._create_menu()
+        self._create_toolbar()
+        self._create_main_ui()
+
+    def _create_menu(self):
+        menubar = Menu(self)
+
+        # 檔案功能表
+        file_menu = Menu(menubar, tearoff=0)
+        file_menu.add_command(label="開啟", command=self.open_file)
+        file_menu.add_command(label="儲存", command=self.save_file)
+        file_menu.add_separator()
+        file_menu.add_command(label="離開", command=self.quit)
+        menubar.add_cascade(label="檔案", menu=file_menu)
+
+        # 編輯功能表
+        edit_menu = Menu(menubar, tearoff=0)
+        edit_menu.add_command(label="剪下")
+        edit_menu.add_command(label="貼上")
+        menubar.add_cascade(label="編輯", menu=edit_menu)
+
+        self.config(menu=menubar)
+
+    def _create_toolbar(self):
+        toolbar = Frame(self, bd=1, relief=tk.RAISED)
+
+        toggle_output_btn = Button(toolbar, text="顯示/隱藏輸出", command=self.toggle_output)
+        toggle_output_btn.pack(side=tk.LEFT, padx=2, pady=2)
+
+        toolbar.pack(side=tk.TOP, fill=tk.X)
+
+    def _create_main_ui(self):
+        self.main_frame = Frame(self)
+        self.main_frame.pack(expand=True, fill=tk.BOTH)
+
+        # 底部按鈕
+        self.action_btn = Button(self.main_frame, text="執行", command=self.perform_action)
+        self.action_btn.pack(side=tk.BOTTOM, pady=5)
+
+        # 可隱藏的輸出區域
+        self.output_visible = True
+        self.output_text = Text(self.main_frame, height=10)
+        self.output_text.pack(side=tk.BOTTOM, fill=tk.X, padx=5, pady=5)
+
+    def toggle_output(self):
+        if self.output_visible:
+            self.output_text.pack_forget()
+        else:
+            self.output_text.pack(side=tk.BOTTOM, fill=tk.X, padx=5, pady=5)
+        self.output_visible = not self.output_visible
+
+    def perform_action(self):
+        self.output_text.insert(tk.END, "你按下了執行按鈕\n")
+
+    def open_file(self):
+        messagebox.showinfo("開啟", "這裡可以加入開啟檔案的功能。")
+
+    def save_file(self):
+        messagebox.showinfo("儲存", "這裡可以加入儲存檔案的功能。")
+
+
+if __name__ == "__main__":
+    app = App()
+    app.mainloop()
