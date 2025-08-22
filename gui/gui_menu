@@ -7,7 +7,7 @@ class App(tk.Tk):
         super().__init__()
 
         self.title("GUI 範例")
-        self.geometry("600x400")
+        self.geometry("600x500")
 
         self.current_file = None  # 記錄目前檔案路徑
 
@@ -29,8 +29,8 @@ class App(tk.Tk):
 
         # 編輯功能表
         edit_menu = Menu(menubar, tearoff=0)
-        edit_menu.add_command(label="剪下", command=lambda: self.output_text.event_generate("<<Cut>>"))
-        edit_menu.add_command(label="貼上", command=lambda: self.output_text.event_generate("<<Paste>>"))
+        edit_menu.add_command(label="剪下", command=lambda: self.editor_text.event_generate("<<Cut>>"))
+        edit_menu.add_command(label="貼上", command=lambda: self.editor_text.event_generate("<<Paste>>"))
         menubar.add_cascade(label="編輯", menu=edit_menu)
 
         self.config(menu=menubar)
@@ -47,13 +47,17 @@ class App(tk.Tk):
         self.main_frame = Frame(self)
         self.main_frame.pack(expand=True, fill=tk.BOTH)
 
-        # 底部按鈕
+        # 編輯區（新增）
+        self.editor_text = Text(self.main_frame, height=10)
+        self.editor_text.pack(side=tk.TOP, fill=tk.BOTH, expand=True, padx=5, pady=5)
+
+        # 執行按鈕
         self.action_btn = Button(self.main_frame, text="執行", command=self.perform_action)
         self.action_btn.pack(side=tk.BOTTOM, pady=5)
 
-        # 可隱藏的輸出區域
+        # 輸出區（可隱藏）
         self.output_visible = True
-        self.output_text = Text(self.main_frame, height=10)
+        self.output_text = Text(self.main_frame, height=8, bg="#f0f0f0")
         self.output_text.pack(side=tk.BOTTOM, fill=tk.X, padx=5, pady=5)
 
     def toggle_output(self):
@@ -74,8 +78,8 @@ class App(tk.Tk):
             try:
                 with open(file_path, "r", encoding="utf-8") as f:
                     content = f.read()
-                self.output_text.delete(1.0, tk.END)
-                self.output_text.insert(tk.END, content)
+                self.editor_text.delete(1.0, tk.END)
+                self.editor_text.insert(tk.END, content)
                 self.current_file = file_path
                 self.title(f"GUI 範例 - {file_path}")
             except Exception as e:
@@ -84,7 +88,7 @@ class App(tk.Tk):
     def save_file(self):
         if self.current_file:
             try:
-                content = self.output_text.get(1.0, tk.END)
+                content = self.editor_text.get(1.0, tk.END)
                 with open(self.current_file, "w", encoding="utf-8") as f:
                     f.write(content)
                 messagebox.showinfo("儲存成功", f"檔案已儲存：\n{self.current_file}")
@@ -100,5 +104,16 @@ class App(tk.Tk):
         )
         if file_path:
             try:
-                content = self.output_text.get(1.0, tk.END)
-                with open(file_path, "w", encoding="utf-8")_
+                content = self.editor_text.get(1.0, tk.END)
+                with open(file_path, "w", encoding="utf-8") as f:
+                    f.write(content)
+                self.current_file = file_path
+                self.title(f"GUI 範例 - {file_path}")
+                messagebox.showinfo("另存成功", f"檔案已儲存為：\n{file_path}")
+            except Exception as e:
+                messagebox.showerror("錯誤", f"無法儲存檔案：\n{e}")
+
+
+if __name__ == "__main__":
+    app = App()
+    app.mainloop()
