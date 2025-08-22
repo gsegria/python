@@ -7,7 +7,7 @@ class App(tk.Tk):
         super().__init__()
 
         self.title("GUI 範例")
-        self.geometry("600x500")
+        self.geometry("800x640")
 
         self.current_file = None  # 記錄目前檔案路徑
 
