@@ -7,18 +7,18 @@ class App(tk.Tk):
         super().__init__()
 
         self.title("GUI 範例")
-        self.geometry("800x640")
-
-        self.current_file = None  # 記錄目前檔案路徑
+        self.geometry("600x500")
+        self.current_file = None
+        self.toolbar_visible = True
 
         self._create_menu()
         self._create_toolbar()
         self._create_main_ui()
+        self._bind_shortcuts()
 
     def _create_menu(self):
         menubar = Menu(self)
 
-        # 檔案功能表
         file_menu = Menu(menubar, tearoff=0)
         file_menu.add_command(label="開啟", command=self.open_file)
         file_menu.add_command(label="儲存", command=self.save_file)
@@ -27,38 +27,49 @@ class App(tk.Tk):
         file_menu.add_command(label="離開", command=self.quit)
         menubar.add_cascade(label="檔案", menu=file_menu)
 
-        # 編輯功能表
         edit_menu = Menu(menubar, tearoff=0)
-        edit_menu.add_command(label="剪下", command=lambda: self.editor_text.event_generate("<<Cut>>"))
-        edit_menu.add_command(label="貼上", command=lambda: self.editor_text.event_generate("<<Paste>>"))
+        edit_menu.add_command(label="剪下", command=self.cut_text)
+        edit_menu.add_command(label="複製", command=self.copy_text)
+        edit_menu.add_command(label="貼上", command=self.paste_text)
+        edit_menu.add_command(label="全選", command=self.select_all)
+        edit_menu.add_command(label="清除", command=self.clear_text)
         menubar.add_cascade(label="編輯", menu=edit_menu)
 
         self.config(menu=menubar)
 
     def _create_toolbar(self):
-        toolbar = Frame(self, bd=1, relief=tk.RAISED)
+        self.toolbar = Frame(self, bd=1, relief=tk.RAISED)
 
-        toggle_output_btn = Button(toolbar, text="顯示/隱藏輸出", command=self.toggle_output)
-        toggle_output_btn.pack(side=tk.LEFT, padx=2, pady=2)
+        Button(self.toolbar, text="✂️ 剪下", command=self.cut_text).pack(side=tk.LEFT, padx=2, pady=2)
+        Button(self.toolbar, text="📄 複製", command=self.copy_text).pack(side=tk.LEFT, padx=2, pady=2)
+        Button(self.toolbar, text="📋 貼上", command=self.paste_text).pack(side=tk.LEFT, padx=2, pady=2)
+        Button(self.toolbar, text="🔍 全選", command=self.select_all).pack(side=tk.LEFT, padx=2, pady=2)
+        Button(self.toolbar, text="🧹 清除", command=self.clear_text).pack(side=tk.LEFT, padx=2, pady=2)
+        Button(self.toolbar, text="👁️ 輸出", command=self.toggle_output).pack(side=tk.LEFT, padx=10, pady=2)
+        Button(self.toolbar, text="📌 收合工具列", command=self.toggle_toolbar).pack(side=tk.RIGHT, padx=10, pady=2)
 
-        toolbar.pack(side=tk.TOP, fill=tk.X)
+        self.toolbar.pack(side=tk.TOP, fill=tk.X)
 
     def _create_main_ui(self):
         self.main_frame = Frame(self)
         self.main_frame.pack(expand=True, fill=tk.BOTH)
 
-        # 編輯區（新增）
         self.editor_text = Text(self.main_frame, height=10)
         self.editor_text.pack(side=tk.TOP, fill=tk.BOTH, expand=True, padx=5, pady=5)
 
-        # 執行按鈕
         self.action_btn = Button(self.main_frame, text="執行", command=self.perform_action)
         self.action_btn.pack(side=tk.BOTTOM, pady=5)
 
-        # 輸出區（可隱藏）
         self.output_visible = True
         self.output_text = Text(self.main_frame, height=8, bg="#f0f0f0")
         self.output_text.pack(side=tk.BOTTOM, fill=tk.X, padx=5, pady=5)
+
+    def _bind_shortcuts(self):
+        self.bind_all("<Control-x>", lambda e: self.cut_text())
+        self.bind_all("<Control-c>", lambda e: self.copy_text())
+        self.bind_all("<Control-v>", lambda e: self.paste_text())
+        self.bind_all("<Control-a>", lambda e: self.select_all())
+        self.bind_all("<Control-l>", lambda e: self.clear_text())
 
     def toggle_output(self):
         if self.output_visible:
@@ -66,6 +77,13 @@ class App(tk.Tk):
         else:
             self.output_text.pack(side=tk.BOTTOM, fill=tk.X, padx=5, pady=5)
         self.output_visible = not self.output_visible
+
+    def toggle_toolbar(self):
+        if self.toolbar_visible:
+            self.toolbar.pack_forget()
+        else:
+            self.toolbar.pack(side=tk.TOP, fill=tk.X)
+        self.toolbar_visible = not self.toolbar_visible
 
     def perform_action(self):
         self.output_text.insert(tk.END, "你按下了執行按鈕\n")
@@ -112,6 +130,22 @@ class App(tk.Tk):
                 messagebox.showinfo("另存成功", f"檔案已儲存為：\n{file_path}")
             except Exception as e:
                 messagebox.showerror("錯誤", f"無法儲存檔案：\n{e}")
+
+    # 編輯功能
+    def cut_text(self):
+        self.editor_text.event_generate("<<Cut>>")
+
+    def copy_text(self):
+        self.editor_text.event_generate("<<Copy>>")
+
+    def paste_text(self):
+        self.editor_text.event_generate("<<Paste>>")
+
+    def select_all(self):
+        self.editor_text.tag_add("sel", "1.0", tk.END)
+
+    def clear_text(self):
+        self.editor_text.delete("1.0", tk.END)
 
 
 if __name__ == "__main__":
