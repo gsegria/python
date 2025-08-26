@@ -6,8 +6,10 @@ import seaborn as sns
 import numpy as np
 
 # 1. 載入 IMDb 資料集
-num_words = 10000  # 僅使用前 1 萬常見單字
-maxlen = 200       # 每個評論長度補齊到 200
+ #num_words = 10000  # 僅使用前 1 萬常見單字
+ # maxlen = 200       # 每個評論長度補齊到 200
+num_words = 100  # 僅使用前 1 萬常見單字
+maxlen = 20       # 每個評論長度補齊到 200
 
 (x_train, y_train), (x_test, y_test) = tf.keras.datasets.imdb.load_data(num_words=num_words)
 

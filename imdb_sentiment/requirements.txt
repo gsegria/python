@@ -4,3 +4,10 @@ matplotlib
 seaborn
 scikit-learn
 pytest
+
+pip install matplotlib
+pip3 install matplotlib
+
+pip install seaborn
+pip3 install seaborn
+pip install seaborn
