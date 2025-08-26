@@ -18,3 +18,6 @@ htmlcov/
 venv/
 env/
 ENV/
+
+#忽略
+pp.bat
