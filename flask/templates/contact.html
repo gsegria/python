@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>聯絡我們</title>
+</head>
+<body>
+    <h1>聯絡我們</h1>
+
+    {% if submitted %}
+        <p>謝謝你的來信，{{ name }}！</p>
+        <p>你的訊息：{{ message }}</p>
+    {% else %}
+        <form method="POST">
+            <label for="name">姓名：</label><br>
+            <input type="text" id="name" name="name" required><br><br>
+
+            <label for="message">留言：</label><br>
+            <textarea id="message" name="message" required></textarea><br><br>
+
+            <button type="submit">送出</button>
+        </form>
+    {% endif %}
+
+    <a href="/">返回首頁</a>
+</body>
+</html>
