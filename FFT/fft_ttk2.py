@@ -61,6 +61,9 @@ class FilterApp:
         self.root = root
         root.title("多功能音訊濾波器調整與播放")
 
+        # 新增安全關閉
+        self.root.protocol("WM_DELETE_WINDOW", self.on_closing)
+
         # 變數
         self.freq_var = tk.DoubleVar(value=1000)
 
@@ -183,6 +186,22 @@ class FilterApp:
 
     def stop_audio(self):
         sd.stop()
+
+    def on_closing(self):
+        import sys
+        try:
+            sd.stop()
+        except Exception:
+            pass
+        try:
+            plt.close('all')
+        except Exception:
+            pass
+        try:
+            self.root.destroy()
+        except Exception:
+            pass
+        sys.exit(0)
 
 if __name__ == "__main__":
     root = tk.Tk()
