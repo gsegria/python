@@ -24,6 +24,18 @@ def note_to_freq(note):
 root = tk.Tk()
 root.title("88鍵鋼琴")
 
+# 視窗大小
+win_width = 800
+win_height = 320
+
+# 計算置中位置
+screen_width = root.winfo_screenwidth()
+screen_height = root.winfo_screenheight()
+x = int((screen_width - win_width) / 2)
+y = int((screen_height - win_height) / 2)
+
+root.geometry(f"{win_width}x{win_height}+{x}+{y}")
+
 # Label 顯示按鍵
 label_var = tk.StringVar()
 label_var.set("按下琴鍵顯示音符")
