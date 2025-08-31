@@ -21,21 +21,24 @@ def note_to_freq(note):
     n = note_names.index(note) - A4_index
     return 440 * 2**(n/12)
 
-def play_note(note, duration=0.5):
-    freq = note_to_freq(note)
-    t = np.linspace(0, duration, int(fs * duration), endpoint=False)
-    wave = 0.3 * np.sin(2 * np.pi * freq * t)
-    sd.play(wave, fs)
-    sd.wait()
-
 root = tk.Tk()
 root.title("88鍵鋼琴")
+
+# Label 顯示按鍵
+label_var = tk.StringVar()
+label_var.set("按下琴鍵顯示音符")
+note_label = tk.Label(root, textvariable=label_var, font=("Arial", 16))
+note_label.pack(pady=5)
 
 canvas = tk.Canvas(root, height=200, bg="gray")
 canvas.pack(fill="both", expand=True)
 
-white_keys = []
-black_keys = []
+def play_note(note):
+    label_var.set(f"按下: {note}")
+    freq = note_to_freq(note)
+    t = np.linspace(0, 0.5, int(fs * 0.5), endpoint=False)
+    wave = 0.3 * np.sin(2 * np.pi * freq * t)
+    sd.play(wave, fs)
 
 def draw_keys(event=None):
     canvas.delete("all")
@@ -56,11 +59,14 @@ def draw_keys(event=None):
             x1 = x0 + white_width
             rect = canvas.create_rectangle(x0, 0, x1, white_height, fill="white", outline="black")
             canvas.tag_bind(rect, "<Button-1>", lambda e, n=note: play_note(n))
+            
+            # 顯示音符名稱 & 指法
+            finger = (white_index % 5) + 1
+            y_text = white_height - 20
+            canvas.create_text((x0+x1)/2, y_text, text=f"{note}\n{finger}", fill="blue", font=("Arial", int(white_width/3)))
             white_index += 1
 
     # 畫黑鍵
-    black_positions = [0,1,3,4,5,7,8,10,11,12,14,15,17,18,19,21,22,24,25,26,28,29,31,32,
-                       33,35,36,38,39,40,42,43,45,46,47]
     for i, note in enumerate(note_names):
         if "#" in note:
             white_idx = sum(1 for n in note_names[:i] if "#" not in n)
@@ -69,10 +75,7 @@ def draw_keys(event=None):
             rect = canvas.create_rectangle(x0, 0, x1, black_height, fill="black", outline="black")
             canvas.tag_bind(rect, "<Button-1>", lambda e, n=note: play_note(n))
 
-# 初次繪製
 draw_keys()
-
-# 視窗大小改變時自動重繪
 canvas.bind("<Configure>", draw_keys)
 
 root.mainloop()
