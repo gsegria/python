@@ -6,6 +6,11 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import sounddevice as sd
 from scipy.signal import firwin, lfilter, butter, filtfilt, cheby1, cheby2, ellip
 
+# ✅ 新增字體設定（支援中文顯示）
+import matplotlib
+matplotlib.rcParams['font.sans-serif'] = ['Microsoft JhengHei']  # 或 'SimHei' for 簡體
+matplotlib.rcParams['axes.unicode_minus'] = False
+
 # 參數
 fs = 8000  # 取樣率
 duration = 2  # 秒

@@ -1,59 +1,127 @@
-import numpy as np
-import matplotlib.pyplot as plt
-import pandas as pd
-from scipy.signal import firwin, lfilter, butter, filtfilt
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Ping Hsu 的互動履歷</title>
+<link rel="stylesheet" href="css/style.css"/>
+<script src="https://cdn.jsdelivr.net/pyodide/v0.23.4/full/pyodide.js"></script>
+</head>
+<body>
+<div class="wrap">
 
-# 1. 訊號參數設定
-fs = 5000  # 取樣率 5kHz
-duration = 1.0  # 秒
-t = np.linspace(0, duration, int(fs * duration), endpoint=False)
+  <!-- 左側選單 -->
+  <aside class="leftCol">
+    <button data-target="intro" title="介紹">🏠</button>
+    <button data-target="section1" title="Ping Resume">📄</button>
+    <button data-target="section2" title="外部連結">🔗</button>
+    <button data-target="chatbot" title="PingBot">🤖</button>
+  </aside>
 
-# 2. 模擬訊號（50Hz + 120Hz + 1000Hz）
-signal = (
-    np.sin(2 * np.pi * 50 * t) +
-    0.5 * np.sin(2 * np.pi * 120 * t) +
-    0.8 * np.sin(2 * np.pi * 1000 * t)
-)
+  <!-- 右側內容 -->
+  <main class="rightCol">
+    <section class="introCard" id="intro">
+      <h2>歡迎來到 Ping Hsu 的網站！</h2>
+      <p>今天是美好的一天，願你心情愉快！🌞</p>
+    </section>
 
-# === FIR 濾波器設計: 通帶 40-150Hz (保留低頻，濾除高頻) ===
-numtaps = 101  # 濾波器階數
-fir_coeff = firwin(numtaps, [40, 150], pass_zero=False, fs=fs)
+    <!-- Ping Resume 作品表格 -->
+    <section class="sectionCard" id="section1">
+      <h3>Ping Resume</h3>
+      <p>作品連結與範例運行：</p>
 
-# FIR 濾波
-signal_fir = lfilter(fir_coeff, 1.0, signal)
+      <table border="1" cellspacing="0" cellpadding="6">
+        <thead>
+          <tr>
+            <th>作品名稱</th>
+            <th>連結</th>
+            <th>作品名稱</th>
+            <th>連結</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Python</td>
+            <td><a href="https://github.com/gsegria/python/tree/main/AI" target="_blank">打開網址</a></td>
+            <td>Python FFT</td>
+            <td><a href="https://github.com/gsegria/python/tree/main/FFT" target="_blank">打開網址</a></td>
+          </tr>
+          <tr>
+            <td><button class="btn btn-black" onclick="runPython('print(\"Hello from Python AI\")')">運行範例</button></td>
+            <td></td>
+            <td><button class="btn btn-black" onclick="runPython('import numpy as np\nprint(np.fft.fft([1,2,3,4]))')">運行範例</button></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>XAMPP</td>
+            <td><a href="https://github.com/gsegria/XAMPP_SQL" target="_blank">打開網址</a></td>
+            <td>XAMPP SQL</td>
+            <td><a href="https://github.com/gsegria/XAMPP_SQL" target="_blank">打開網址</a></td>
+          </tr>
+          <tr>
+            <td><button class="btn btn-black" onclick="runPython('print(\"XAMPP example\")')">運行範例</button></td>
+            <td></td>
+            <td><button class="btn btn-black" onclick="runPython('print(\"XAMPP SQL example\")')">運行範例</button></td>
+            <td></td>
+          </tr>
+        </tbody>
+      </table>
 
-# === IIR 濾波器設計: 巴特沃斯帶通濾波器，40-150Hz ===
-order = 4
-lowcut = 40
-highcut = 150
-b, a = butter(order, [lowcut / (0.5 * fs), highcut / (0.5 * fs)], btype='band')
+      <h4>運行結果：</h4>
+      <pre id="pyOutput" style="background:#f0f0f0;padding:10px;border-radius:5px;height:150px;overflow:auto;"></pre>
+    </section>
 
-# IIR 濾波 (用 filtfilt 雙向濾波避免相位失真)
-signal_iir = filtfilt(b, a, signal)
+    <!-- 外部連結 -->
+    <section class="sectionCard" id="section2">
+      <h3>外部連結</h3>
+      <div class="buttons">
+        <button class="btn btn-gradient" onclick="open104Home()">前往 104</button>
+        <button class="btn btn-red" onclick="openPingHsu104()">前往 PingHsu's 104</button>
+        <button class="btn btn-green" onclick="openLinkedIn()">前往 LinkedIn</button>
+        <button class="btn btn-yellow" onclick="openLinkedInPingHsu()">前往 PingHsu's LinkedIn</button>
+        <button class="btn btn-pink" onclick="openNotion()">前往 Notion</button>
+      </div>
+    </section>
 
-# --- 定義 FFT 計算函數 ---
-def compute_fft(x, fs):
-    N = len(x)
-    fft_result = np.fft.fft(x)
-    frequencies = np.fft.fftfreq(N, 1 / fs)
-    magnitude = np.abs(fft_result) / N
-    mask = frequencies >= 0
-    return frequencies[mask], magnitude[mask]
+    <!-- PingBot 聊天 -->
+    <section class="sectionCard" id="chatbot">
+      <h3>🤖 與 PingBot 聊聊 (未授權)</h3>
+      <div id="chatbox"></div>
+      <div class="chatControls">
+        <input type="text" id="userInput" placeholder="輸入你的問題..." />
+        <button class="btn btn-black" onclick="sendMessage()">送出</button>
+        <button class="btn btn-gray" onclick="clearChat()">清除</button>
+      </div>
+    </section>
+  </main>
+</div>
 
-# 3. FFT 計算
-freq, mag_orig = compute_fft(signal, fs)
-_, mag_fir = compute_fft(signal_fir, fs)
-_, mag_iir = compute_fft(signal_iir, fs)
+<script src="js/main.js"></script>
+<script src="js/chatbot.js"></script>
 
-# 4. 頻譜圖比較
-plt.figure(figsize=(12, 6))
-plt.plot(freq, mag_orig, label='原始訊號')
-plt.plot(freq, mag_fir, label='FIR 濾波結果')
-plt.plot(freq, mag_iir, label='IIR 濾波結果')
-plt.title('原始訊號與濾波後訊號的 FFT 頻譜比較')
-plt.xlabel('頻率 (Hz)')
-plt.ylabel('幅度')
-plt.xlim(0, 1500)
-plt.grid()
-plt.legend()
-plt.show()
+<script>
+let pyodideReady = false;
+let pyodide = null;
+
+async function initPyodide() {
+  pyodide = await loadPyodide();
+  pyodideReady = true;
+}
+initPyodide();
+
+async function runPython(code) {
+  const outputEl = document.getElementById('pyOutput');
+  if (!pyodideReady) {
+    outputEl.textContent = 'Python 還沒準備好，請稍候...';
+    return;
+  }
+  try {
+    let result = await pyodide.runPythonAsync(code);
+    outputEl.textContent = result ?? '';
+  } catch (err) {
+    outputEl.textContent = '錯誤：' + err;
+  }
+}
+</script>
+</body>
+</html>

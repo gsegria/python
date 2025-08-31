@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>線上 Python 編輯器</title>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/brython@3.11.1/brython.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/brython@3.11.1/brython_stdlib.js"></script>
+<style>
+body { font-family: Arial; margin: 20px; }
+textarea { width: 100%; height: 300px; font-family: monospace; font-size: 14px; }
+#output { width: 100%; height: 150px; border: 1px solid #ccc; padding: 5px; overflow-y: auto; background:#f9f9f9; }
+input { width: 150px; }
+button { margin: 2px; }
+.keyword { color: blue; }
+.string { color: green; }
+.comment { color: gray; }
+.toolbar { margin-bottom: 5px; }
+</style>
+</head>
+<body onload="brython()">
+
+<h2>線上 Python 編輯器</h2>
+
+<div class="toolbar">
+<button id="cutBtn">✂️ 剪下</button>
+<button id="copyBtn">📄 複製</button>
+<button id="pasteBtn">📋 貼上</button>
+<button id="selectAllBtn">🔍 全選</button>
+<button id="clearBtn">🧹 清除</button>
+<label>語言: 
+<select id="langSelect">
+  <option value="Python" selected>Python</option>
+  <option value="JavaScript">JavaScript</option>
+  <option value="Markdown">Markdown</option>
+</select>
+</label>
+</div>
+
+<label>搜尋: <input id="search"></label>
+<label>取代為: <input id="replace"></label>
+<button id="searchBtn">搜尋下一個</button>
+<button id="replaceBtn">全部取代</button>
+
+<br><br>
+
+<textarea id="editor">
+print("Hello Brython!")
+for i in range(5):
+    print(i)
+</textarea>
+<br>
+<button id="runBtn">執行程式</button>
+
+<h3>輸出結果:</h3>
+<div id="output"></div>
+
+<script type="text/python">
+from browser import document, html
+
+editor = document['editor']
+output_div = document['output']
+search_input = document['search']
+replace_input = document['replace']
+lang_select = document['langSelect']
+
+# --------------------- 執行程式 ---------------------
+def run(ev):
+    output_div.clear()
+    code = editor.value
+    try:
+        class DivWriter:
+            def write(self, txt): output_div <= html.P(txt)
+        import sys
+        sys.stdout = DivWriter()
+        exec(code)
+        sys.stdout = sys.__stdout__
+    except Exception as e:
+        output_div <= html.P(f"錯誤: {e}")
+
+document['runBtn'].bind('click', run)
+
+# --------------------- 搜尋與取代 ---------------------
+current_index = [0]
+
+def search_next(ev):
+    text = editor.value
+    target = search_input.value
+    if not target:
+        return
+    idx = text.find(target, current_index[0])
+    if idx == -1:
+        current_index[0] = 0
+        output_div <= html.P("找不到更多符合項目")
+        return
+    current_index[0] = idx + len(target)
+    output_div <= html.P(f"找到: '{target}' at {idx}")
+
+document['searchBtn'].bind('click', search_next)
+
+def replace_all(ev):
+    text = editor.value
+    target = search_input.value
+    replacement = replace_input.value
+    if not target:
+        return
+    editor.value = text.replace(target, replacement)
+    output_div <= html.P("全部取代完成")
+
+document['replaceBtn'].bind('click', replace_all)
+
+# --------------------- 工具列功能 ---------------------
+def cut(ev):
+    document.execCommand("cut")
+
+def copy(ev):
+    document.execCommand("copy")
+
+def paste(ev):
+    document.execCommand("paste")
+
+def select_all(ev):
+    editor.focus()
+    editor.select()
+
+def clear(ev):
+    editor.value = ""
+
+document['cutBtn'].bind('click', cut)
+document['copyBtn'].bind('click', copy)
+document['pasteBtn'].bind('click', paste)
+document['selectAllBtn'].bind('click', select_all)
+document['clearBtn'].bind('click', clear)
+
+# --------------------- 簡單 Python 語法高亮 ---------------------
+PY_KEYWORDS = [
+    'False','class','finally','is','return','None','continue','for',
+    'lambda','try','True','def','from','nonlocal','while','and','del',
+    'global','not','with','as','elif','if','or','yield','assert',
+    'else','import','pass','break','except','in','raise'
+]
+
+def highlight_syntax(ev=None):
+    import re
+    content = editor.value
+    # 先清空
+    editor.style.background = "#fff"
+    # 高亮關鍵字（簡單方式）
+    for kw in PY_KEYWORDS:
+        pattern = r'\b{}\b'.format(kw)
+        for m in re.finditer(pattern, content):
+            pass
+            # 高亮功能可用 CSS 標記或外部套件，瀏覽器 textarea 限制，暫時不標色
+
+editor.bind("input", highlight_syntax)
+
+</script>
+
+</body>
+</html>

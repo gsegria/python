@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Brython 測試</title>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/brython@3.11.1/brython.min.js"></script>
+</head>
+<body onload="brython()">
+
+<h3>線上 Python 測試區</h3>
+<textarea id="pycode" rows="6" style="width:100%;">print("Hello, GitHub Pages!")</textarea><br>
+<button id="runPythonBtn">執行程式</button>
+<div id="output" style="background:#eee; padding:10px; margin-top:10px; min-height:50px;"></div>
+
+<script type="text/python">
+from browser import document, html
+
+def run(ev):
+    output = document["output"]
+    output.html = ""  # 清空舊結果
+    code = document["pycode"].value
+    try:
+        # 用 local 變數接收 print 結果
+        exec_globals = {"print": lambda *args: output <= html.P(" ".join(map(str,args)))}
+        exec(code, exec_globals)
+    except Exception as e:
+        output <= html.P(f"錯誤: {e}")
+
+document["runPythonBtn"].bind("click", run)
+</script>
+
+
+</body>
+</html>
