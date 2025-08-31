@@ -117,6 +117,9 @@ class FilterGUI:
         # 滑鼠滾輪縮放（✅ 現在支援 time + freq）
         self.canvas.mpl_connect("scroll_event", self.on_scroll)
         self.canvas.mpl_connect("button_press_event", self.on_button_press)
+        self.canvas.mpl_connect("button_press_event", self.on_drag_start)
+        self.canvas.mpl_connect("motion_notify_event", self.on_drag_motion)
+        self.canvas.mpl_connect("button_release_event", self.on_drag_end)
 
         # 右鍵選單
         self.menu = tk.Menu(self.root, tearoff=0)
@@ -153,6 +156,29 @@ class FilterGUI:
         self.update_plot()
 
 
+
+    # --- 左右平移（拖曳） ---
+    def on_drag_start(self, event):
+        if event.button == 1 and event.inaxes in [self.ax_time, self.ax_freq]:
+            self._dragging = True
+            self._drag_start_x = event.xdata
+            self._drag_ax = event.inaxes
+            self._orig_xlim = self._drag_ax.get_xlim()
+
+    def on_drag_motion(self, event):
+        if not self._dragging or event.xdata is None or event.inaxes != self._drag_ax:
+            return
+        dx = self._drag_start_x - event.xdata
+        x0, x1 = self._orig_xlim
+        width = x1 - x0
+        self._drag_ax.set_xlim(x0 + dx, x0 + dx + width)
+        self.canvas.draw_idle()
+
+    def on_drag_end(self, event):
+        self._dragging = False
+        self._drag_start_x = None
+        self._drag_ax = None
+        self._orig_xlim = None
 
     # ---------- 互動功能處理 ----------
     def on_scroll(self, event):
