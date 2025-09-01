@@ -20,4 +20,5 @@ env/
 ENV/
 
 #忽略
+*.bak
 pp.bat
