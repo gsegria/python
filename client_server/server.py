@@ -4,8 +4,7 @@ import threading
 HOST = '0.0.0.0'
 PORT = 65432
 
-clients = []
-
+clients = []  # 保存所有連線 client
 
 def handle_client(conn, addr):
     print(f"Connected by {addr}")
@@ -33,7 +32,6 @@ def handle_client(conn, addr):
         if conn in clients:
             clients.remove(conn)
         conn.close()
-
 
 with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
     s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
