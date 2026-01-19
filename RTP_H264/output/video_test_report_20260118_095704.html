@@ -1,0 +1,123 @@
+
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="utf-8">
+        <title>Video Decode Test Report</title>
+        <style>
+            body { font-family: Consolas, monospace; margin: 40px; }
+            pre { background: #f8f8f8; padding: 15px; border:1px solid #ccc; }
+            table { border-collapse: collapse; width:80%; margin-top:20px; }
+            th, td { border:1px solid #ccc; padding:8px; text-align:center; }
+            th { background-color:#f2f2f2; }
+            .final { margin-top:20px; font-size:24px; font-weight:bold; color:#F44336; }
+            canvas { margin-top:30px; }
+            .report-time { margin-top:10px; font-size:14px; color:#555; }
+        </style>
+    </head>
+    <body>
+        <h1>Video Decode Test Report</h1>
+        <div class="report-time"><b>Generated at:</b> 2026-01-18 09:57:04</div>
+
+        <pre>
+=== Video Decode Test Report ===
+Resolution           | Expected: 1280x720     | Actual: 700x394    | FAIL
+Decode FPS           | Expected: >= 30.0      | Actual: 533.86     | PASS
+CPU Usage (%)        | Expected: <= 60.0      | Actual: 0.00       | PASS
+Bitrate (kbps)       | Expected: <= 2500      | Actual: 299        | PASS
+QP (Avg)             | Expected: <= 30        | Actual: 28         | PASS
+PSNR (dB)            | Expected: >= 35.0      | Actual: 37.2       | PASS
+</pre>
+
+        <table>
+            <tr><th>Item</th><th>Expected</th><th>Actual</th><th>Result</th></tr>
+            
+        <tr>
+            <td>Resolution</td>
+            <td>1280x720</td>
+            <td>700x394</td>
+            <td style="color:#F44336; font-weight:bold;">FAIL</td>
+        </tr>
+        
+        <tr>
+            <td>Decode FPS</td>
+            <td>>= 30.0</td>
+            <td>533.86</td>
+            <td style="color:#4CAF50; font-weight:bold;">PASS</td>
+        </tr>
+        
+        <tr>
+            <td>CPU Usage (%)</td>
+            <td><= 60.0</td>
+            <td>0.00</td>
+            <td style="color:#4CAF50; font-weight:bold;">PASS</td>
+        </tr>
+        
+        <tr>
+            <td>Bitrate (kbps)</td>
+            <td><= 2500</td>
+            <td>299</td>
+            <td style="color:#4CAF50; font-weight:bold;">PASS</td>
+        </tr>
+        
+        <tr>
+            <td>QP (Avg)</td>
+            <td><= 30</td>
+            <td>28</td>
+            <td style="color:#4CAF50; font-weight:bold;">PASS</td>
+        </tr>
+        
+        <tr>
+            <td>PSNR (dB)</td>
+            <td>>= 35.0</td>
+            <td>37.2</td>
+            <td style="color:#4CAF50; font-weight:bold;">PASS</td>
+        </tr>
+        
+        </table>
+
+        <div class="final">FINAL RESULT: FAIL</div>
+
+        <h2>Performance Timeline</h2>
+        <canvas id="perfChart" width="900" height="400"></canvas>
+
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script>
+            const data = [{"frame": 10, "fps": 666.3, "cpu": 0.0, "qp": 28, "bitrate": 2000, "psnr": 37.2}, {"frame": 20, "fps": 571.34, "cpu": 0.0, "qp": 28, "bitrate": 2000, "psnr": 37.2}, {"frame": 30, "fps": 545.36, "cpu": 0.0, "qp": 28, "bitrate": 2000, "psnr": 37.2}, {"frame": 40, "fps": 533.32, "cpu": 0.0, "qp": 28, "bitrate": 2000, "psnr": 37.2}, {"frame": 50, "fps": 526.07, "cpu": 0.0, "qp": 28, "bitrate": 2000, "psnr": 37.2}, {"frame": 60, "fps": 526.2, "cpu": 0.0, "qp": 28, "bitrate": 2000, "psnr": 37.2}, {"frame": 70, "fps": 521.05, "cpu": 0.0, "qp": 28, "bitrate": 2000, "psnr": 37.2}, {"frame": 80, "fps": 520.27, "cpu": 0.0, "qp": 28, "bitrate": 2000, "psnr": 37.2}, {"frame": 90, "fps": 520.51, "cpu": 0.0, "qp": 28, "bitrate": 2000, "psnr": 37.2}, {"frame": 100, "fps": 522.45, "cpu": 0.0, "qp": 28, "bitrate": 2000, "psnr": 37.2}, {"frame": 110, "fps": 522.29, "cpu": 0.0, "qp": 28, "bitrate": 2000, "psnr": 37.2}, {"frame": 120, "fps": 520.22, "cpu": 0.0, "qp": 28, "bitrate": 2000, "psnr": 37.2}, {"frame": 130, "fps": 520.8, "cpu": 0.0, "qp": 28, "bitrate": 2000, "psnr": 37.2}, {"frame": 140, "fps": 522.43, "cpu": 0.0, "qp": 28, "bitrate": 2000, "psnr": 37.2}, {"frame": 150, "fps": 525.24, "cpu": 0.0, "qp": 28, "bitrate": 2000, "psnr": 37.2}, {"frame": 160, "fps": 529.49, "cpu": 0.0, "qp": 28, "bitrate": 2000, "psnr": 37.2}, {"frame": 170, "fps": 530.09, "cpu": 0.0, "qp": 28, "bitrate": 2000, "psnr": 37.2}, {"frame": 180, "fps": 533.47, "cpu": 0.0, "qp": 28, "bitrate": 2000, "psnr": 37.2}, {"frame": 190, "fps": 535.07, "cpu": 0.0, "qp": 28, "bitrate": 2000, "psnr": 37.2}, {"frame": 200, "fps": 536.41, "cpu": 97.7, "qp": 28, "bitrate": 2000, "psnr": 37.2}, {"frame": 210, "fps": 534.73, "cpu": 0.0, "qp": 28, "bitrate": 2000, "psnr": 37.2}, {"frame": 220, "fps": 533.16, "cpu": 0.0, "qp": 28, "bitrate": 2000, "psnr": 37.2}, {"frame": 230, "fps": 532.71, "cpu": 0.0, "qp": 28, "bitrate": 2000, "psnr": 37.2}, {"frame": 240, "fps": 531.12, "cpu": 0.0, "qp": 28, "bitrate": 2000, "psnr": 37.2}, {"frame": 250, "fps": 529.9, "cpu": 0.0, "qp": 28, "bitrate": 2000, "psnr": 37.2}, {"frame": 260, "fps": 527.46, "cpu": 0.0, "qp": 28, "bitrate": 2000, "psnr": 37.2}, {"frame": 270, "fps": 525.89, "cpu": 0.0, "qp": 28, "bitrate": 2000, "psnr": 37.2}, {"frame": 280, "fps": 524.62, "cpu": 0.0, "qp": 28, "bitrate": 2000, "psnr": 37.2}, {"frame": 290, "fps": 524.95, "cpu": 0.0, "qp": 28, "bitrate": 2000, "psnr": 37.2}, {"frame": 300, "fps": 522.94, "cpu": 0.0, "qp": 28, "bitrate": 2000, "psnr": 37.2}, {"frame": 310, "fps": 523.15, "cpu": 0.0, "qp": 28, "bitrate": 2000, "psnr": 37.2}, {"frame": 320, "fps": 522.49, "cpu": 0.0, "qp": 28, "bitrate": 2000, "psnr": 37.2}, {"frame": 330, "fps": 522.37, "cpu": 0.0, "qp": 28, "bitrate": 2000, "psnr": 37.2}, {"frame": 340, "fps": 523.3, "cpu": 0.0, "qp": 28, "bitrate": 2000, "psnr": 37.2}, {"frame": 350, "fps": 522.89, "cpu": 0.0, "qp": 28, "bitrate": 2000, "psnr": 37.2}, {"frame": 360, "fps": 522.07, "cpu": 0.0, "qp": 28, "bitrate": 2000, "psnr": 37.2}, {"frame": 370, "fps": 522.2, "cpu": 0.0, "qp": 28, "bitrate": 2000, "psnr": 37.2}, {"frame": 380, "fps": 522.71, "cpu": 0.0, "qp": 28, "bitrate": 2000, "psnr": 37.2}, {"frame": 390, "fps": 523.53, "cpu": 0.0, "qp": 28, "bitrate": 2000, "psnr": 37.2}, {"frame": 400, "fps": 523.63, "cpu": 104.2, "qp": 28, "bitrate": 2000, "psnr": 37.2}, {"frame": 410, "fps": 523.19, "cpu": 0.0, "qp": 28, "bitrate": 2000, "psnr": 37.2}, {"frame": 420, "fps": 522.58, "cpu": 0.0, "qp": 28, "bitrate": 2000, "psnr": 37.2}, {"frame": 430, "fps": 522.82, "cpu": 0.0, "qp": 28, "bitrate": 2000, "psnr": 37.2}, {"frame": 440, "fps": 522.88, "cpu": 104.2, "qp": 28, "bitrate": 2000, "psnr": 37.2}, {"frame": 450, "fps": 523.27, "cpu": 0.0, "qp": 28, "bitrate": 2000, "psnr": 37.2}, {"frame": 460, "fps": 524.15, "cpu": 0.0, "qp": 28, "bitrate": 2000, "psnr": 37.2}, {"frame": 470, "fps": 524.94, "cpu": 0.0, "qp": 28, "bitrate": 2000, "psnr": 37.2}, {"frame": 480, "fps": 525.45, "cpu": 0.0, "qp": 28, "bitrate": 2000, "psnr": 37.2}, {"frame": 490, "fps": 525.46, "cpu": 0.0, "qp": 28, "bitrate": 2000, "psnr": 37.2}, {"frame": 500, "fps": 525.56, "cpu": 0.0, "qp": 28, "bitrate": 2000, "psnr": 37.2}, {"frame": 510, "fps": 524.91, "cpu": 0.0, "qp": 28, "bitrate": 2000, "psnr": 37.2}, {"frame": 520, "fps": 526.27, "cpu": 0.0, "qp": 28, "bitrate": 2000, "psnr": 37.2}, {"frame": 530, "fps": 526.54, "cpu": 0.0, "qp": 28, "bitrate": 2000, "psnr": 37.2}, {"frame": 540, "fps": 526.43, "cpu": 0.0, "qp": 28, "bitrate": 2000, "psnr": 37.2}, {"frame": 550, "fps": 525.91, "cpu": 0.0, "qp": 28, "bitrate": 2000, "psnr": 37.2}, {"frame": 560, "fps": 526.6, "cpu": 0.0, "qp": 28, "bitrate": 2000, "psnr": 37.2}, {"frame": 570, "fps": 527.63, "cpu": 0.0, "qp": 28, "bitrate": 2000, "psnr": 37.2}, {"frame": 580, "fps": 527.33, "cpu": 0.0, "qp": 28, "bitrate": 2000, "psnr": 37.2}, {"frame": 590, "fps": 527.31, "cpu": 0.0, "qp": 28, "bitrate": 2000, "psnr": 37.2}, {"frame": 600, "fps": 526.83, "cpu": 208.3, "qp": 28, "bitrate": 2000, "psnr": 37.2}, {"frame": 610, "fps": 525.92, "cpu": 0.0, "qp": 28, "bitrate": 2000, "psnr": 37.2}, {"frame": 620, "fps": 526.82, "cpu": 0.0, "qp": 28, "bitrate": 2000, "psnr": 37.2}, {"frame": 630, "fps": 527.25, "cpu": 0.0, "qp": 28, "bitrate": 2000, "psnr": 37.2}, {"frame": 640, "fps": 527.67, "cpu": 0.0, "qp": 28, "bitrate": 2000, "psnr": 37.2}, {"frame": 650, "fps": 528.45, "cpu": 0.0, "qp": 28, "bitrate": 2000, "psnr": 37.2}, {"frame": 660, "fps": 529.44, "cpu": 0.0, "qp": 28, "bitrate": 2000, "psnr": 37.2}, {"frame": 670, "fps": 529.43, "cpu": 0.0, "qp": 28, "bitrate": 2000, "psnr": 37.2}, {"frame": 680, "fps": 530.33, "cpu": 0.0, "qp": 28, "bitrate": 2000, "psnr": 37.2}, {"frame": 690, "fps": 530.88, "cpu": 0.0, "qp": 28, "bitrate": 2000, "psnr": 37.2}, {"frame": 700, "fps": 530.94, "cpu": 0.0, "qp": 28, "bitrate": 2000, "psnr": 37.2}, {"frame": 710, "fps": 531.35, "cpu": 0.0, "qp": 28, "bitrate": 2000, "psnr": 37.2}, {"frame": 720, "fps": 532.29, "cpu": 0.0, "qp": 28, "bitrate": 2000, "psnr": 37.2}, {"frame": 730, "fps": 532.59, "cpu": 0.0, "qp": 28, "bitrate": 2000, "psnr": 37.2}, {"frame": 740, "fps": 533.29, "cpu": 0.0, "qp": 28, "bitrate": 2000, "psnr": 37.2}, {"frame": 750, "fps": 533.51, "cpu": 0.0, "qp": 28, "bitrate": 2000, "psnr": 37.2}, {"frame": 760, "fps": 533.12, "cpu": 0.0, "qp": 28, "bitrate": 2000, "psnr": 37.2}, {"frame": 770, "fps": 533.65, "cpu": 0.0, "qp": 28, "bitrate": 2000, "psnr": 37.2}, {"frame": 780, "fps": 533.65, "cpu": 0.0, "qp": 28, "bitrate": 2000, "psnr": 37.2}, {"frame": 790, "fps": 534.21, "cpu": 0.0, "qp": 28, "bitrate": 2000, "psnr": 37.2}, {"frame": 800, "fps": 534.39, "cpu": 0.0, "qp": 28, "bitrate": 2000, "psnr": 37.2}, {"frame": 810, "fps": 534.62, "cpu": 0.0, "qp": 28, "bitrate": 2000, "psnr": 37.2}, {"frame": 820, "fps": 534.55, "cpu": 0.0, "qp": 28, "bitrate": 2000, "psnr": 37.2}, {"frame": 830, "fps": 534.45, "cpu": 0.0, "qp": 28, "bitrate": 2000, "psnr": 37.2}, {"frame": 840, "fps": 535.04, "cpu": 0.0, "qp": 28, "bitrate": 2000, "psnr": 37.2}, {"frame": 850, "fps": 535.29, "cpu": 0.0, "qp": 28, "bitrate": 2000, "psnr": 37.2}, {"frame": 860, "fps": 535.96, "cpu": 0.0, "qp": 28, "bitrate": 2000, "psnr": 37.2}, {"frame": 870, "fps": 536.21, "cpu": 0.0, "qp": 28, "bitrate": 2000, "psnr": 37.2}, {"frame": 880, "fps": 536.38, "cpu": 0.0, "qp": 28, "bitrate": 2000, "psnr": 37.2}, {"frame": 890, "fps": 536.92, "cpu": 0.0, "qp": 28, "bitrate": 2000, "psnr": 37.2}, {"frame": 900, "fps": 537.47, "cpu": 0.0, "qp": 28, "bitrate": 2000, "psnr": 37.2}];
+            const labels = data.map(d => d.frame);
+            const fpsData = data.map(d => d.fps);
+            const cpuData = data.map(d => d.cpu);
+            const qpData = data.map(d => d.qp);
+            const bitrateData = data.map(d => d.bitrate);
+            const psnrData = data.map(d => d.psnr);
+
+            const ctx = document.getElementById('perfChart').getContext('2d');
+            const perfChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        { label:'FPS', data:fpsData, borderColor:'rgba(75,192,192,1)', yAxisID:'y' },
+                        { label:'CPU (%)', data:cpuData, borderColor:'rgba(255,99,132,1)', yAxisID:'y1' },
+                        { label:'QP', data:qpData, borderColor:'rgba(54,162,235,1)', yAxisID:'y2' },
+                        { label:'Bitrate', data:bitrateData, borderColor:'rgba(255,206,86,1)', yAxisID:'y3' },
+                        { label:'PSNR', data:psnrData, borderColor:'rgba(153,102,255,1)', yAxisID:'y4' }
+                    ]
+                },
+                options: {
+                    responsive:true,
+                    interaction: { mode:'index', intersect:false },
+                    stacked:false,
+                    scales:{
+                        y:{ type:'linear', position:'left', title:{ display:true, text:'FPS' } },
+                        y1:{ type:'linear', position:'right', title:{ display:true, text:'CPU (%)' }, grid:{drawOnChartArea:false} },
+                        y2:{ type:'linear', position:'left', offset:true, title:{ display:true, text:'QP' } },
+                        y3:{ type:'linear', position:'right', offset:true, title:{ display:true, text:'Bitrate (kbps)' } },
+                        y4:{ type:'linear', position:'left', offset:true, title:{ display:true, text:'PSNR' }, grid:{drawOnChartArea:false} }
+                    }
+                }
+            });
+        </script>
+    </body>
+    </html>
+    
