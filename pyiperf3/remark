@@ -1,6 +1,14 @@
 
 
 
+main.py
+metrics.py
+
+report.py
+evaluator.py
+iperf_runner.py
+interface_detect.py
+
 
 iperf3_rf_test/
 ├─ main.py # 入口（門檻設定 / 流程控制）
@@ -13,3 +21,5 @@ iperf3_rf_test/
 │ ├─ report.py # CSV + HTML + 圖表
 │ └─ utils.py
 └─ output/
+
+

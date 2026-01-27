@@ -1,5 +1,7 @@
 import subprocess
 import json
+import sys
+import platform
 
 
 def run_iperf(server_ip, port=5201, udp=False, bitrate=None, duration=30, reverse=False):
@@ -14,7 +16,18 @@ def run_iperf(server_ip, port=5201, udp=False, bitrate=None, duration=30, revers
     :param reverse: 是否反向測試 (-R)
     :return: dict, iperf3 JSON 結果
     """
-    cmd = ['iperf3', '-c', server_ip, '-p', str(port), '-t', str(duration), '-J']
+
+    
+    cmd = []
+
+    # 自動使用 Windows 或 Linux iperf3
+    if platform.system() == 'Windows':
+        iperf_bin = 'iperf3.exe'
+    else:
+        iperf_bin = 'iperf3'
+
+    cmd = [iperf_bin, '-c', server_ip, '-p', str(port), '-J', '-t', str(duration)]
+
 
     if reverse:
         cmd.append('-R')
@@ -26,6 +39,10 @@ def run_iperf(server_ip, port=5201, udp=False, bitrate=None, duration=30, revers
     try:
         result = subprocess.run(cmd, capture_output=True, text=True, check=True)
         return json.loads(result.stdout)
+    
+    except FileNotFoundError:
+        print(f"[ERROR] 找不到 iperf3 執行檔，請確認已安裝或放在 PATH")
+        return None
     except subprocess.CalledProcessError as e:
         print(f"[ERROR] iperf3 執行失敗: {e}")
         print(f"STDOUT: {e.stdout}")
