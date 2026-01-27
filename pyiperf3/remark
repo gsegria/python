@@ -1,0 +1,15 @@
+
+
+
+
+iperf3_rf_test/
+├─ main.py # 入口（門檻設定 / 流程控制）
+├─ requirements.txt
+├─ lib/
+│ ├─ interface_detect.py # 自動偵測介面類型
+│ ├─ iperf_runner.py # iperf3 控制與 JSON 擷取
+│ ├─ metrics.py # RF 指標計算
+│ ├─ evaluator.py # PASS / FAIL 判斷
+│ ├─ report.py # CSV + HTML + 圖表
+│ └─ utils.py
+└─ output/

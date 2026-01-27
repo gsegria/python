@@ -1,0 +1,2 @@
+tcp_dl,udp_loss,udp_jitter,pass
+44.23,0,0.11,False
