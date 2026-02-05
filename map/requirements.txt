@@ -1,2 +1,7 @@
 folium
 geopy
+requests
+pyproj
+numpy
+
+
