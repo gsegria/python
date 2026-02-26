@@ -1,0 +1,23 @@
+# Python 編譯檔
+__pycache__/
+*.py[cod]
+*$py.class
+
+# pytest 產生的暫存檔案
+.cache/
+.pytest_cache/
+
+# 測試報告
+*.log
+*.tmp
+*.coverage
+coverage.xml
+htmlcov/
+
+# 虛擬環境（如果有）
+venv/
+env/
+ENV/
+
+#忽略
+pp.bat
