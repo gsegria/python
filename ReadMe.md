@@ -6,6 +6,15 @@ source venv/bin/activate
 # Windows (PowerShell)
 venv\Scripts\activate
 
+並排比較：
+compare int1.png out1.png -compose difference diff1.png
+convert diff1.png -auto-level diff_vis1.png
+
+運行 
+python main.py
+在運行
+compare -metric AE -compose difference noisy_image.png denoised_image.png diff.png
+
 
 
 python -m venv venv
