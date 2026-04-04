@@ -24,6 +24,6 @@ output/
 
 # 日誌檔案
 *.log
-*.png
+*#.png
 *.jpg
 
