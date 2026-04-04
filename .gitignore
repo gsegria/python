@@ -14,7 +14,7 @@ Thumbs.db
 # OpenCV / 影像輸出
 output/
 *.jpg
-*.png
+*#.png
 
 # IDE/編輯器設定檔
 .vscode/
@@ -24,6 +24,4 @@ output/
 
 # 日誌檔案
 *.log
-*#.png
-*.jpg
 
