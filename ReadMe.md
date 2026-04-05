@@ -92,4 +92,3 @@ export PYTHONPATH=.
 # 執行
 python tests/test_image_io.py
 python tests/test_image_processing.py
-

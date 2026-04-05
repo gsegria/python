@@ -27,3 +27,5 @@ output/
 *.tmp
 *.swp
 
+#ignore
+results/
