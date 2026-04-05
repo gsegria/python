@@ -1,64 +1,63 @@
 
-Run:
-# Linux/macOS
-source venv/bin/activate
 
-# Windows (PowerShell)
-venv\Scripts\activate
+# imgproc
 
-並排比較：
-compare int1.png out1.png -compose difference diff1.png
-convert diff1.png -auto-level diff_vis1.png
+`imgproc` 是一個 Python 影像處理專案框架，模組化設計，方便擴充至特徵萃取、物件偵測或影片處理。
 
-運行 
-python main.py
-在運行
-compare -metric AE -compose difference noisy_image.png denoised_image.png diff.png
+## 功能
 
+- 單張影像處理
+  - 讀取影像（JPG/PNG/BMP）
+  - Resize、灰階、去噪
+  - 特徵點萃取（ORB/SIFT）
+  - 簡單物件偵測（輪廓偵測）
+  - 視覺化特徵與偵測結果
+- 可延伸到影片（MP4/AVI）
+  - 逐幀前處理 + 特徵 + 偵測
+  - 輸出處理後影片
 
-
-python -m venv venv
-source venv/bin/activate    # Linux/macOS
-venv\Scripts\activate       # Windows
-
-pip install -r requirements.txt
+## 專案結構
 
 
-image_denoise_project/
+
+imgproc/
 │
-├─ main.py # 程式入口
-├─ config.ini # 使用者可調整參數
-├─ requirements.txt # Python 套件依賴
-├─ README.md
-├─ lib/
-│ ├─ init.py
-│ └─ denoise.py # 核心降噪演算法
-└─ test_images/
-    └─ noisy_image.jpg # 範例影像
+├── main.py # 主程式入口
+├── config.ini # 參數設定
+├── requirements.txt # Python 套件需求
+├── README.md # 專案說明
+│
+├── lib/ # 模組化演算法與工具
+│ ├── image_io.py
+│ ├── preprocessing.py
+│ ├── feature_extraction.py
+│ ├── detection.py
+│ └── utils.py
+│
+└── tests/ # 測試
+└── test_image_io.py
+    
 
 
 
 
 
+1️⃣ 專案原本功能整理
 
----
+目前專案功能以 影像處理（Image Processing） 為主：
 
-## 功能特色
+模組	功能說明	現有內容
+main.py	主程式流程控制	讀取 config.ini，讀影像 → 前處理 → 特徵萃取 → 偵測 → 存檔
+lib/image_io.py	影像讀寫	load_image() / save_image()
+lib/preprocessing.py	影像前處理	resize, denoise (gaussian/median)
+lib/feature_extraction.py	特徵點萃取	ORB / SIFT，回傳 keypoints 和 descriptors
+lib/detection.py	物件偵測	簡單輪廓偵測 (Canny + findContours)
+lib/utils.py	工具函數	draw_keypoints()
+tests/test_image_io.py	單元測試	讀取/存檔測試影像
 
-- 支援降噪算法：
-  - `bilateral` 雙邊濾波（邊緣保護效果佳）
-  - `nl_means` 非局部均值去噪（效果更平滑）
-- 可調整降噪強度與邊緣保護程度
-- 支援彩色或灰階影像
-- 顯示原圖與降噪後影像，並可保存結果
-- 完整 GitHub 專案結構，方便擴充或批量處理
 
----
 
-## 安裝方法
-
-1. 克隆專案
+## 安裝需求
 
 ```bash
-git clone https://github.com/你的帳號/image_denoise_project.git
-cd image_denoise_project
+pip install -r requirements.txt
