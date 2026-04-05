@@ -4,45 +4,57 @@
 
 `imgproc` 是一個 Python 影像處理專案框架，模組化設計，方便擴充至特徵萃取、物件偵測或影片處理。
 
+# imgproc
+
+`imgproc` 是一個 Python 影像處理專案框架，採模組化設計，方便擴充至特徵萃取、物件偵測與影片處理。
+
+---
+
 ## 功能
 
-- 單張影像處理
-  - 讀取影像（JPG/PNG/BMP）
-  - Resize、灰階、去噪
-  - 特徵點萃取（ORB/SIFT）
-  - 簡單物件偵測（輪廓偵測）
-  - 視覺化特徵與偵測結果
-- 可延伸到影片（MP4/AVI）
-  - 逐幀前處理 + 特徵 + 偵測
-  - 輸出處理後影片
+### 📷 單張影像處理
+- 讀取影像（JPG / PNG / BMP）
+- Resize、灰階、去噪
+- 特徵點萃取（ORB / SIFT）
+- 簡單物件偵測（輪廓偵測）
+- 視覺化特徵與偵測結果
 
-## 專案結構
+### 🎥 影片處理（可擴充）
+- 逐幀前處理 + 特徵萃取 + 偵測
+- 輸出處理後影片（MP4 / AVI）
 
+---
 
+## Project Structure
 
+```text
 imgproc/
 │
-├── main.py # 主程式入口
-├── config.ini # 參數設定
-├── requirements.txt # Python 套件需求
-├── README.md # 專案說明
+├── main.py              # 主程式入口（影像/影片處理流程）
+├── config.ini           # 參數設定（路徑、影像處理參數）
+├── requirements.txt     # Python 套件依賴
+├── README.md            # 專案說明
 │
-├── lib/ # 模組化演算法與工具
-│ ├── image_io.py
-│ ├── preprocessing.py
-│ ├── feature_extraction.py
-│ ├── detection.py
-│ └── utils.py
+├── data/                # 測試資料（input / output）
+│   ├── input.jpg
+│   └── output/
 │
-└── tests/ # 測試
-└── test_image_io.py
-    
+├── lib/                 # 核心模組（可重用）
+│   ├── __init__.py
+│   ├── image_io.py      # 影像/影片讀寫
+│   ├── preprocessing.py # 前處理（resize / denoise）
+│   ├── feature_extraction.py # 特徵萃取（ORB / SIFT）
+│   ├── detection.py     # 物件偵測（contours）
+│   └── utils.py         # 工具函數（畫特徵點等）
+│
+└── tests/               # 單元測試
+    ├── test_io.py
+    └── test_preprocessing.py
 
 
 
-
-
-1️⃣ 專案原本功能整理
+---
+## 專案功能整理
 
 目前專案功能以 影像處理（Image Processing） 為主：
 
