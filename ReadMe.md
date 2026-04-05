@@ -73,3 +73,23 @@ tests/test_image_io.py	單元測試	讀取/存檔測試影像
 
 ```bash
 pip install -r requirements.txt
+
+
+## Run
+
+# 建立環境
+python3 -m venv venv
+
+# 啟用
+source venv/bin/activate
+
+# 安裝
+pip install -r requirements.txt
+
+# 設定路徑
+export PYTHONPATH=.
+
+# 執行
+python tests/test_image_io.py
+python tests/test_image_processing.py
+
