@@ -27,5 +27,5 @@ output/
 *.tmp
 *.swp
 
-#ignore
-results/
+# 例外：results 資料夾的 jpg 不忽略
+!results/*.jpg
