@@ -1,8 +1,11 @@
+import os
+import configparser
 import cv2
 from lib import image_io, preprocessing
 
 def test_image_processing(input_path, output_path):
     print(f"讀取影像: {input_path}")
+    
     # 1️⃣ 讀影像
     img = image_io.load_image(input_path, gray=False)
     print(f"原始影像尺寸: {img.shape}")
@@ -20,11 +23,22 @@ def test_image_processing(input_path, output_path):
     img_denoise = preprocessing.denoise(img_gray, method='gaussian')
     print("去噪完成")
 
-    # 5️⃣ 存檔
+    # 5️⃣ 確保輸出資料夾存在
+    output_dir = os.path.dirname(output_path)
+    if output_dir and not os.path.exists(output_dir):
+        os.makedirs(output_dir)
+
+    # 6️⃣ 存檔
     cv2.imwrite(output_path, img_denoise)
     print(f"處理後影像已存檔: {output_path}")
 
+
 if __name__ == "__main__":
-    input_path = "./data/input.jpg"    # 輸入影像
-    output_path = "./data/output_test.jpg"  # 輸出影像
+    # 讀取 config.ini
+    config = configparser.ConfigParser()
+    config.read(os.path.join(os.path.dirname(__file__), '..', 'config.ini'))
+
+    input_path = config['IMAGE']['input_path']
+    output_path = config['IMAGE']['output_path']
+
     test_image_processing(input_path, output_path)
