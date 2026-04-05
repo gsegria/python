@@ -1,21 +1,23 @@
+# test_image_processing.py
+
 import os
 import configparser
 import cv2
-from lib import image_io, preprocessing
+from lib import image_io, preprocessing, utils
 
-def test_image_processing(input_path, output_path, resize_width=None, resize_height=None, gray_scale=False, denoise_method='gaussian'):
+def test_image_processing(input_path, output_path, resize_width=None, resize_height=None, gray_scale=False, denoise_method='gaussian', diff_path=None):
     print(f"讀取影像: {input_path}")
     
-    # 1️⃣ 讀影像
-    img = image_io.load_image(input_path, gray=False)
-    print(f"原始影像尺寸: {img.shape}")
+    # 1️⃣ 讀原始影像 (保留彩色，用於 diff)
+    original_img = image_io.load_image(input_path, gray=False)
+    print(f"原始影像尺寸: {original_img.shape}")
 
     # 2️⃣ Resize（如果 config 沒指定，保持原尺寸）
     if resize_width is not None and resize_height is not None:
-        img_resized = preprocessing.resize(img, resize_width, resize_height)
+        img_resized = preprocessing.resize(original_img, resize_width, resize_height)
         print(f"Resize 後尺寸: {img_resized.shape}")
     else:
-        img_resized = img
+        img_resized = original_img
         print("未指定 resize，保留原尺寸")
 
     # 3️⃣ 灰階
@@ -39,6 +41,14 @@ def test_image_processing(input_path, output_path, resize_width=None, resize_hei
     cv2.imwrite(output_path, img_denoise)
     print(f"處理後影像已存檔: {output_path}")
 
+    # 7️⃣ 產生 diff.jpg（如果有指定 diff_path）
+    if diff_path:
+        diff_dir = os.path.dirname(diff_path)
+        if diff_dir and not os.path.exists(diff_dir):
+            os.makedirs(diff_dir)
+        utils.save_diff_image(original_img, img_denoise, diff_path)
+        print(f"Diff image saved to {diff_path}")
+
 
 if __name__ == "__main__":
     # 讀取 config.ini
@@ -53,9 +63,11 @@ if __name__ == "__main__":
     resize_height = config['IMAGE'].getint('resize_height', fallback=None)
     gray_scale = config['IMAGE'].getboolean('gray_scale', fallback=False)
     denoise_method = config['PREPROCESSING'].get('denoise_method', fallback='gaussian')
+    diff_path = config['IMAGE'].get('diff_path', None)
 
     test_image_processing(input_path, output_path,
                           resize_width=resize_width,
                           resize_height=resize_height,
                           gray_scale=gray_scale,
-                          denoise_method=denoise_method)
+                          denoise_method=denoise_method,
+                          diff_path=diff_path)
