@@ -1,5 +1,9 @@
-opencv-python
-numpy
-matplotlib
-scikit-image
+# 影像/影片處理
+opencv-python>=4.8.1      # 影像讀寫與處理 (cv2)
+numpy>=1.27.0             # 數值運算
+scikit-image>=0.21.0      # 補強影像處理功能 (denoise, morphology 等)
+matplotlib>=3.8.0         # 畫圖或 debug 用
 
+# 可選工具
+tqdm>=4.66.1              # 進度條 (影片 frame 處理可用)
+Pillow>=10.0.0            # 影像檔案讀寫備援

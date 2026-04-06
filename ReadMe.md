@@ -30,27 +30,35 @@
 ```text
 imgproc/
 │
-├── main.py              # 主程式入口（影像/影片處理流程）
-├── config.ini           # 參數設定（路徑、影像處理參數）
-├── requirements.txt     # Python 套件依賴
-├── README.md            # 專案說明
+├── main.py                  # 主程式入口（影像 / 影片處理流程統一入口）
+├── config.ini               # 參數設定（路徑、影像處理參數、影片設定）
+├── requirements.txt         # Python 套件依賴
+├── README.md                # 專案說明
 │
-├── data/                # 測試資料（input / output）
-│   ├── input.jpg
-│   └── output/
+├── data/                    # 測試資料
+│   ├── input/               # 輸入影像 / 影片
+│   │   ├── input.jpg
+│   │   └── input_video.mp4
+│   └── output/              # 處理後輸出
+│       ├── output.jpg
+│       ├── diff.jpg
+│       ├── output_video.mp4
+│       └── diff_video.mp4
 │
-├── lib/                 # 核心模組（可重用）
+├── lib/                     # 核心模組（可重用）
 │   ├── __init__.py
-│   ├── image_io.py      # 影像/影片讀寫
-│   ├── preprocessing.py # 前處理（resize / denoise）
-│   ├── feature_extraction.py # 特徵萃取（ORB / SIFT）
-│   ├── detection.py     # 物件偵測（contours）
-│   └── utils.py         # 工具函數（畫特徵點等）
+│   ├── image_io.py          # 單張影像讀取與存檔
+│   ├── video_io.py          # 影片讀取、串流寫入、diff 計算
+│   ├── image_pipeline.py    # 影像處理 pipeline（process_image_pipeline）
+│   ├── preprocessing.py     # 前處理（resize / denoise）
+│   ├── feature_extraction.py# 特徵萃取（ORB / SIFT）
+│   ├── detection.py         # 物件偵測（輪廓 / contours）
+│   └── utils.py             # 工具函數（畫特徵點、diff image 儲存等）
 │
-└── tests/               # 單元測試
+└── tests/                   # 單元測試
     ├── test_io.py
-    └── test_preprocessing.py
-
+    ├── test_preprocessing.py
+    └── test_feature_extraction.py
 
 
 ---
