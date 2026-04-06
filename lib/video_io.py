@@ -25,13 +25,27 @@ def write_video(frames, output_path: str, fps: int = 30, frame_size: Optional[tu
         out.write(f)
     out.release()
 
-def frame_diff(frame1, frame2):
-    """計算兩張影格差異 (灰階 + absdiff)"""
+def frame_diff(frame1, frame2, threshold=15, morph=True):
+    """計算兩張影格差異 (灰階 + absdiff)
+    threshold → 像素差異閾值，可從 config.ini 調整
+    morph → 是否使用膨脹放大差異區域，可從 config.ini 調整
+    """
+    import cv2
+    import numpy as np
+
     gray1 = cv2.cvtColor(frame1, cv2.COLOR_BGR2GRAY)
     gray2 = cv2.cvtColor(frame2, cv2.COLOR_BGR2GRAY)
     diff = cv2.absdiff(gray1, gray2)
-    _, thresh = cv2.threshold(diff, 25, 255, cv2.THRESH_BINARY)
-    return thresh
+
+    _, thresh = cv2.threshold(diff, threshold, 255, cv2.THRESH_BINARY)
+
+    if morph:
+        kernel = np.ones((3, 3), np.uint8)
+        thresh = cv2.dilate(thresh, kernel, iterations=1)
+
+    diff_bgr = cv2.cvtColor(thresh, cv2.COLOR_GRAY2BGR)
+    return diff_bgr
+
 
 # ⭐⭐ 核心抽象（image/video 共用）
 def process_frame(img, config):
@@ -75,7 +89,6 @@ def process_frame(img, config):
 # ⭐⭐ 完整影片流程（全部藏這裡）
 def process_video(input_path, output_dir, config):
     cap = read_video(input_path)
-
     os.makedirs(output_dir, exist_ok=True)
 
     video_name = config['VIDEO'].get('output_video_name', 'output_video.mp4')
@@ -86,12 +99,16 @@ def process_video(input_path, output_dir, config):
     if fps is None:
         fps = cap.get(cv2.CAP_PROP_FPS) or 30
 
+    # ⭐ 新增: 從 config 讀取 diff 參數
+    diff_threshold = config['VIDEO'].getint('diff_threshold', 15)
+    diff_morph = config['VIDEO'].getboolean('diff_morph', True)
+
     frame_count = int(cap.get(cv2.CAP_PROP_FRAME_COUNT)) or 0
     frames_out = []
     frames_diff = []
     prev_frame = None
 
-    # ⭐ 使用 tqdm 顯示進度
+    from tqdm import tqdm
     with tqdm(total=frame_count, desc="Processing video frames") as pbar:
         while True:
             ret, frame = cap.read()
@@ -102,16 +119,16 @@ def process_video(input_path, output_dir, config):
             frames_out.append(processed)
 
             if enable_diff and prev_frame is not None:
-                diff = frame_diff(prev_frame, frame)
-                diff_bgr = cv2.cvtColor(diff, cv2.COLOR_GRAY2BGR)
-                frames_diff.append(diff_bgr)
+                diff = frame_diff(prev_frame, frame,
+                                  threshold=diff_threshold,
+                                  morph=diff_morph)
+                frames_diff.append(diff)
 
             prev_frame = frame
             pbar.update(1)
 
     cap.release()
 
-    # ⭐ output
     out_video = os.path.join(output_dir, video_name)
     write_video(frames_out, out_video, fps=fps)
 
